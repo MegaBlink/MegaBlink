@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<link rel="shortcut icon" href="icone-blink.png" />
+    <title>Blink Dubs</title>
+	<!-- Inclua o jQuery e o jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	    <!-- Inclua o CSS do jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+	
+		/* Estilos para o corpo da página */
+		body {
+			background-color: rgb(20,20,20);
+		}
+	
+	.Subtitulos {
+    font: 20px arial;
+    color: rgb(250,177,199);
+    line-height: 20px;
+    letter-spacing: 0.03em;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.BodyText {
+    font: 16px arial;
+    color: #FFFFFF;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+        /* Defina o tamanho do slider */
+        #volumeSlider {
+            width: 400px;
+			height: 40px;
+			padding-bottom: 150px:
+        }
+		
+		 /* Estilize o container do vídeo para ocupar 95% da largura */
+        .video-original {
+            width: 95%;
+            margin: 0 auto; /* Centralize o vídeo horizontalmente */
+        }
+
+        /* Estilize o vídeo para manter a proporção e ajustar a altura */
+        .video-original iframe {
+            width: 100%;
+            height: auto;
+        }
+		
+		/* Estilize o container do vídeo para ocupar 30% da largura */
+        .video-dublado {
+            width: 30%;
+            margin-top: 50px; /* Centralize o vídeo horizontalmente */
+        }
+		
+		button{
+		    width: 50px;
+			height: 50px;
+		}
+		
+.ui-slider .ui-slider-handle {
+	width: 2em;
+	height: 3em;
+}
+
+    </style>
+</head>
+<body>
+    <h1 class="Subtitulos">MegaBlink Dubs</h1>
+
+    <!-- Primeiro o vídeo do YouTube -->
+	<div class="video-original" id="original"></div>
+
+<p class="BodyText">Use apenas os controles abaixo</p>
+
+    <!-- Botões de controle -->
+    <button onclick="skipBackward()"><<</button>
+    <button onclick="playVideos()">Play</button>
+	<button onclick="pauseVideos()">Pause</button>
+	<button onclick="stopVideos()">Stop</button>
+
+    <button onclick="skipForward()">>></button>
+	
+	<p class="BodyText">Dublagem < - > Original</p>
+	
+	<div id="volumeSlider"></div>
+	
+	<p class="BodyText">Recomendações:<br>
+	1-Usar apenas os controles indicados.<br>
+	2-No celular, girar a tela para ter melhor vizualização e controle.<br>
+	3-usar os controles reguralmente para manter a sincronia da dublagem, ou seja, cada vez que você usa os controles o vídeo da dublagem sincroniza com o vídeo original<br>
+	</p>
+
+	<p class="BodyText">Apoie o projeto no <a href="https://www.apoia.se/blinkdubs" target="_blank" class="BodyText">APOIA.SE</a><br>	
+	Sim, precisamos da sua ajuda para manter o site, mas precisamos mais ainda da sua ajuda para a comprar um computador melhor para fazer as vozes com IA das pinks, imagine o quanto vai ficar top com as vozes delas em português-br!
+	</p>
+		
+		<p class="BodyText">
+		Siga-nos nas redes sociais:<br>
+		<a href="https://kwai-video.com/u/@megablinkdubs/WC5eg8rP" target="_blank" class="BodyText">Kwai</a> - 
+		<a href="https://instagram.com/megablinkdubs" target="_blank" class="BodyText">Instagram</a> - 
+		<a href="https://www.youtube.com/@blackpink_brasil" target="_blank" class="BodyText">Youtube</a> - 
+		</p>
+		
+	<p class="BodyText" valign="top">
+	Escolha um dos vídeos abaixo:<br>
+	<a href="BlinkDubs.html?dub=634" class="BodyText">FanSign BORN PINK</a><br>
+	<a href="BlinkDubs.html?dub=835" class="BodyText">Blackpink & Starbucks</a><br>
+	<a href="BlinkDubs.html?dub=342" class="BodyText">JENNIE Releva sua maior torcedora</a><br>
+	<a href="BlinkDubs.html?dub=846" class="BodyText">BPM #17 - Born Pink Memories</a><br>
+	</p>
+
+    <!-- Segundo vídeo do YouTube -->
+	<div class="video-dublado" id="dublagem"></div>
+
+<script>
+
+       
+			
+			
+</script>
+
+	<script>
+	
+	    // Obtém os parâmetros da URL
+        const params = new URLSearchParams(window.location.search);
+
+        // Obtém o valor do parâmetro na URL
+        const IDdaUrl = params.get('dub');
+		
+		var idOriginal="pGQzt0VEP14";
+		var idDublado="MSQ-bnypOXg";
+		var original;
+		var dublagem;
+		
+		function onYouTubeIframeAPIReady2() {
+
+			  original = new YT.Player('original', {
+                  videoId: idOriginal
+			});
+
+			dublagem = new YT.Player('dublagem', {
+                videoId: idDublado
+			});
+			
+        }
+		
+		function carregarLinks() {				
+        fetch("dublagens/"+IDdaUrl+".txt")
+            .then(response => response.text())
+            .then(data => {
+                var linhas = data.split('\n');
+                if (linhas.length >= 2) {
+
+                    idOriginal = linhas[0].trim();
+                    idDublado = linhas[1].trim();
+					console.log('Carregou ' + idOriginal+'|'+idDublado);
+					
+					// Após carregar os links, crie os players de vídeo
+                    onYouTubeIframeAPIReady2();
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao ler o arquivo de IDs ' + error);
+
+            });
+		};		
+
+        carregarLinks();
+		//idOriginal="pGQzt0VEP14";
+		//idDublado="MSQ-bnypOXg";
+		//onYouTubeIframeAPIReady2();
+
+        // Função para disparar a chamada
+        function dispararChamada() {
+            dublagem.seekTo(original.getCurrentTime(), true);
+            dublagem.playVideo();
+        }
+
+        // Configura o intervalo para disparar a chamada a cada 3 segundos (3000 milissegundos)
+        //setInterval(dispararChamada, 3000);
+	  
+        function playVideos() {
+            original.playVideo();
+			dublagem.seekTo(original.getCurrentTime(), true);
+            dublagem.playVideo();
+        }
+		
+		function pauseVideos() {
+			original.pauseVideo();
+            dublagem.pauseVideo();
+		}
+		
+        function skipBackward() {
+            original.seekTo(original.getCurrentTime() - 5, true);
+            dublagem.seekTo(original.getCurrentTime() - 5, true);
+        }
+
+        function skipForward() {
+            original.seekTo(original.getCurrentTime() + 5, true);
+            dublagem.seekTo(original.getCurrentTime() + 5, true);
+        }
+		
+		function stopVideos() {
+			original.stopVideo();
+            dublagem.stopVideo();
+		}
+	  
+        //original.setVolume(50);
+        $(function () {
+            // Inicialize o slider de volume
+            $("#volumeSlider").slider({
+                range: "min",
+                value: 50, // Valor inicial (0 a 100)
+                
+                slide: function (event, ui) {
+                    var vuOriginal = ui.value / 100; // Converta para a escala de volume do YouTube (0 a 1)
+					var vuDublado = 1 - vuOriginal;
+					
+                    original.setVolume(vuOriginal * 200); // Defina o volume para o player1
+                    dublagem.setVolume(vuDublado * 200); // Defina o volume para o player2
+                }
+            });
+        });
+		
+    </script>
+    <!-- Inclua a API JavaScript do YouTube -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
